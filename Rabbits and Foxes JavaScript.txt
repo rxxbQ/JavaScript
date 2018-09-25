@@ -1,0 +1,170 @@
+<html>
+<head>
+
+<script language="JavaScript">
+function year()
+{
+	var rabbit, fox, death_rate, birth_rate, year;
+
+	rabbit = parseFloat(document.table.rabbits.value);
+	death_rate = parseFloat(document.table.death.value);
+	birth_rate = parseFloat(document.table.birth.value);
+	fox = parseFloat(document.table.foxes.value);
+	year = parseFloat(document.table.years.value);
+	
+	if(document.table.rabbit_cond[0].checked){
+		death_rate = 5;
+		birth_rate = 8;
+	}
+	if(document.table.rabbit_cond[1].checked){
+		death_rate = death_rate * 1.25;
+	}
+	if(document.table.rabbit_cond[2].checked){
+		death_rate = death_rate * 10;
+	}
+	if(document.table.rabbit_cond[3].checked){
+		death_rate = death_rate - 1;
+		birth_rate = birth_rate * 2;
+	}
+	
+	document.table.rabbit_cond[0].checked = true;
+	
+	var num_rabbit = rabbit - death_rate/100*rabbit + birth_rate/100*rabbit - 4 * fox * 52;
+	var num_year = year+1;
+	var num_fox = fox;
+	var fox_cond = document.getElementById("fox_cond");
+	var fox_cond_selected = parseInt(fox_cond.options[fox_cond.selectedIndex].value);
+	
+	if(num_rabbit<0){
+		num_rabbit = 0;
+	}
+	if(num_fox<0){
+		num_fox = 0;
+	}
+	if(rabbit>=2000 && num_rabbit<2000){
+		window.alert("Have a Fox hunt");
+	}
+	if(fox_cond_selected == 0){
+		num_fox = num_fox * 1.2;
+	}
+	if(fox_cond_selected == 1){
+		num_fox = num_fox * 0.8;
+	}
+	if(fox_cond_selected == 2){
+		num_fox = num_fox * 0.4;
+	}
+
+	document.table.death.value = death_rate;
+	document.table.birth.value = birth_rate;
+	document.table.rabbits.value = num_rabbit;
+	document.table.foxes.value = num_fox;
+	document.table.years.value = num_year;
+	
+	if(document.table.graph.checked){
+		document.graph_area.display.value = document.graph_area.display.value + num_year + " ";
+		for(var i = 0; i < (num_rabbit/250); i++){
+			document.graph_area.display.value = document.graph_area.display.value +"*";
+		}
+		document.graph_area.display.value = document.graph_area.display.value + "\n";
+	}
+}
+
+function clear()
+{
+	document.graph_area.display.value = "";
+}
+</script>
+
+</head>
+
+<body>
+<b>
+	<u><font size="6">Rabbits vs Foxes Population Model</font></u>
+</b>
+
+<form name="table">
+<table border="1">
+<tbody>
+	<tr>
+	<td>
+		<b>No. of Rabbits</b>
+	</td>
+	<td>
+		<center><input name="rabbits" value="5000" type="text" size="10"></center>
+	</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Death rate</b>
+		</td>
+		<td>
+			<center><input name="death" value="5" type="text" size="10"></center>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Birth rate</b>
+		</td>
+		<td>
+			<center><input name="birth" value="8" type="text" size="10"></center>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>No. of Foxes</b>
+		</td>
+		<td>
+			<center><input name="foxes" value="2" type="text" size="10"></center>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Rabbit Conditions</b>
+		</td>
+		<td>
+			<b>Normal</b>
+				<input name="rabbit_cond" checked="" type="radio">
+			<b>Cold</b>
+				<input name="rabbit_cond" type="radio">
+			<b>Fires</b>
+				<input name="rabbit_cond" type="radio">
+			<b>Excellent</b>
+				<input name="rabbit_cond" type="radio">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Graph the Rabbits</b>
+		</td>
+		<td>
+			<input name="graph" checked="" type="checkbox">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="button" value="One year passes" onclick="year()">
+		</td>
+		<td>
+			<b>Years</b>
+			<input name="years" value="0" type="text" size="10">
+		</td>
+	</tr>
+</tbody>
+</table>
+</form>
+
+<b>Fox Conditions</b>
+<select id="fox_cond">
+	<option value="0">Normal</option>
+	<option value="1">Trapping</option>
+	<option value="2">Rabies</option>
+</select><br>
+
+<form name="graph_area">
+	<b>The number of rabbits</b><br>
+	<textarea name="display" rows="10" cols="25"></textarea><br>
+	<input type="button" value="Clear the graph area" onclick="clear()">
+</form>
+
+</body>
+</html>
